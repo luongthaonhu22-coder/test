@@ -32,6 +32,15 @@ st.set_page_config(page_title="ELOGS Quản Trị", page_icon="🚢", layout="wi
 # --- NHÚNG MÃ CSS NÂNG CẤP (PHONG CÁCH SaaS HIỆN ĐẠI) ---
 st.markdown("""
 <style>
+/* Bo tròn các khung thông tin */
+    .stApp { background-color: #f5f7f9; }
+    div.stButton > button { border-radius: 8px; border: 1px solid #ddd; }
+    
+    /* Làm nổi bật vùng Dashboard */
+    .stDataFrame { border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    
+    /* Font chữ hiện đại */
+    body { font-family: 'Segoe UI', sans-serif; }
     /* 1. Đổi Font chữ sang loại hiện đại (Inter, Roboto hoặc Sans-serif) */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
     
