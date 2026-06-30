@@ -8,8 +8,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import date, datetime
 
+# --- HÀM TỰ ĐỘNG HÓA (MÔ PHỎNG BACKEND LOGIC) ---
+import requests # Thư viện dùng để gọi API
+
 def auto_assign_task(task_name, priority_level):
-   """
+    """
     Hàm gọi API thực tế lên máy chủ AWS.
     """
     # 1. Đường link API (Endpoint) do AWS cung cấp cho bạn
@@ -46,7 +49,6 @@ def auto_assign_task(task_name, priority_level):
     except Exception as e:
         st.error(f"Không thể kết nối mạng tới AWS. Chi tiết lỗi: {e}")
         return False
-
 # --- CẤU HÌNH ---
 SENDER_EMAIL = "luongthaonhu22@gmail.com" 
 APP_PASSWORD = "yjny odng vbgd czck"     
