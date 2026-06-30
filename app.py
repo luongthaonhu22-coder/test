@@ -9,19 +9,43 @@ import matplotlib.pyplot as plt
 from datetime import date, datetime
 
 def auto_assign_task(task_name, priority_level):
+   """
+    Hàm gọi API thực tế lên máy chủ AWS.
     """
-    Hàm này giả lập logic tự động gán việc.
-    Trong thực tế, bạn có thể gọi API của AWS Lambda/Azure Function ở đây.
-    """
-    new_task = {
-        "🚩 Quan trọng": True if priority_level == "High" else False,
-        "📌 Tên công việc": task_name,
-        "🏷️ Nhãn": "Hàng Nhập",
-        "⏳ Trạng thái": "Chưa làm",
-        "📅 Deadline": date.today(),
-        "💬 Trao đổi / Ghi chú": "Tự động tạo bởi hệ thống"
+    # 1. Đường link API (Endpoint) do AWS cung cấp cho bạn
+    # (Bạn sẽ lấy link này từ AWS API Gateway)
+    aws_api_url = "https://ab12cd34ef.execute-api.ap-southeast-1.amazonaws.com/prod/tao-cong-viec"
+    
+    # 2. Gói dữ liệu bạn muốn gửi cho AWS
+    payload = {
+        "task_name": task_name,
+        "priority": priority_level
     }
-    st.session_state.tasks_df = pd.concat([st.session_state.tasks_df, pd.DataFrame([new_task])], ignore_index=True)
+    
+    try:
+        # 3. Gửi yêu cầu (POST request) lên AWS
+        response = requests.post(aws_api_url, json=payload)
+        
+        # 4. Kiểm tra xem AWS có trả lời thành công không (Mã 200 là Thành công)
+        if response.status_code == 200:
+            # AWS xử lý xong và trả về dữ liệu của task mới
+            # Ví dụ: AWS sẽ trả về: {"🚩 Quan trọng": True, "📌 Tên công việc": "...", ...}
+            new_task_from_aws = response.json()
+            
+            # Cập nhật dữ liệu từ AWS vào bảng của Streamlit
+            st.session_state.tasks_df = pd.concat(
+                [st.session_state.tasks_df, pd.DataFrame([new_task_from_aws])], 
+                ignore_index=True
+            )
+            return True
+        else:
+            # Nếu AWS báo lỗi (ví dụ: máy chủ sập, sai định dạng)
+            st.error(f"Lỗi từ máy chủ AWS: {response.text}")
+            return False
+            
+    except Exception as e:
+        st.error(f"Không thể kết nối mạng tới AWS. Chi tiết lỗi: {e}")
+        return False
 
 # --- CẤU HÌNH ---
 SENDER_EMAIL = "luongthaonhu22@gmail.com" 
